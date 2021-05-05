@@ -4,6 +4,7 @@
 #include <SD.h>
 #include "pantalla.hpp"
 #include "jsonCom.hpp"
+#include "hw_M5.hpp"
 
 
 #include "cal_interfaces.h"
@@ -12,7 +13,6 @@ extern char     szLocalizacion[25];
 extern int wifi_status ;
 long unsigned int iLastUpdate=0;
 
-M5EPD_Canvas canvas(&M5.EPD);
 pantalla scrPrincipal;
 
 
@@ -23,13 +23,7 @@ QueueHandle_t qTouchScreenQueue;
 
 
 void setup() {
-  M5.begin(true,true,true,true,true);
-  M5.EPD.SetRotation(90);
-  M5.TP.SetRotation(90);
-  M5.EPD.Clear(true);
-  M5.RTC.begin();
-  canvas.createCanvas(540, 960);
-  
+  setup_M5();
 
   SPI.begin(14, 13, 12, 4);
   SD.begin(4, SPI, 20000000);
@@ -48,7 +42,7 @@ void setup() {
   xTaskCreatePinnedToCore(tskTouchScreen, "EventHandler",5000,NULL,1,&thTouchScreenHandler,tskNO_AFFINITY );
 
   
-  scrPrincipal.set_canvas(&canvas);
+ 
   scrPrincipal.dibuja_fondo();
   scrPrincipal.dibuja_top();
   scrPrincipal.dibuja_cuerpo();
@@ -85,9 +79,7 @@ void loop() {
 
    delay(10000);
   if (millis()-iLastUpdate>20000){
-    canvas.fillRect(315,10,24,24,0);
-    canvas.drawPngFile(SD,"/img/sleep.png",315,10);
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16 );
+    scrPrincipal.dibuja_top_apagado();
     apagamos();
   } 
       

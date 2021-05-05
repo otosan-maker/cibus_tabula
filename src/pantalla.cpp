@@ -16,6 +16,12 @@ void pantalla::dibuja_fondo(){
     pCanvas->fillRect(0,850,540,7,15);
 }
 
+void pantalla::dibuja_top_apagado(){
+    pCanvas->fillRect(315,10,24,24,0);
+    pCanvas->drawPngFile(SD,"/img/sleep.png",315,10);
+    pCanvas->pushCanvas(0,0,UPDATE_MODE_GC16 );
+}
+
 void pantalla::dibuja_top(){
     char strTmp[100];
     rtc_time_t RTCtime;

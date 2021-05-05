@@ -9,6 +9,7 @@ class pantalla{
     void set_canvas(M5EPD_Canvas *ppCanvas);
     void dibuja_fondo();
     void dibuja_top();
+    void dibuja_top_apagado();
     void dibuja_cuerpo();
     void dibuja_menu();
     void dibuja_flush();
