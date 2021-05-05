@@ -81,7 +81,7 @@ void loop() {
   Serial.printf("memoria usada por thTouchScreenHandler %d\n",memoria_usada );
   
   
-  Serial.printf("last update %d\n",(millis()-iLastUpdate));
+  Serial.printf("last update %d\n",int(millis()-iLastUpdate));
 
    delay(10000);
   if (millis()-iLastUpdate>20000){
