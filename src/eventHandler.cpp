@@ -1,6 +1,7 @@
 
+#include <Arduino.h>
 #include "pantalla.hpp"
-
+#include <M5EPD.h>
 
 
 extern QueueHandle_t qTouchScreenQueue;

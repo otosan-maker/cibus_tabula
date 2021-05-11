@@ -19,7 +19,7 @@ class pantalla_lilygo : public pantalla{
     public:
     M5EPD_Canvas canvas;
     uint8_t *framebuffer;
-    
+
     pantalla_lilygo();
     void set_canvas(M5EPD_Canvas *ppCanvas);
     void dibuja_fondo();

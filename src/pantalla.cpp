@@ -24,9 +24,7 @@ void pantalla::dibuja_top(){
     
 }
 
-void pantalla::set_canvas(M5EPD_Canvas *ppCanvas){
-   
-}
+
 
 
 
