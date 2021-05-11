@@ -1,12 +1,18 @@
-#ifndef __PANTALLA__
-#define __PANTALLA__
+#ifndef __PANTALLA_M5__
+#define __PANTALLA_M5__
+#include <M5EPD.h>
+#include "pantalla.hpp"
+#include "jsonCom.hpp"
+#include "producto.hpp"
+#include "cal_interfaces.h"
 
 
-class pantalla{
-    
+class pantalla_M5 : public pantalla{
+
     public:
-    
-    
+    M5EPD_Canvas canvas;
+    pantalla_M5();
+    void set_canvas(M5EPD_Canvas *ppCanvas);
     void dibuja_fondo();
     void dibuja_top();
     void dibuja_top_apagado();

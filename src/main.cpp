@@ -1,19 +1,24 @@
+#define __M5_PAPER__
+
 #include <Arduino.h>
-#include <M5EPD.h>
 #include <SPI.h>
 #include <SD.h>
 #include "pantalla.hpp"
+#include "pantalla_M5.hpp"
 #include "jsonCom.hpp"
-#include "hw_M5.hpp"
-
-
 #include "cal_interfaces.h"
+
+
+
+pantalla *pScrPrincipal= NULL;
+
+
 
 extern char     szLocalizacion[25];
 extern int wifi_status ;
 long unsigned int iLastUpdate=0;
 
-pantalla scrPrincipal;
+
 
 
 
@@ -23,7 +28,9 @@ QueueHandle_t qTouchScreenQueue;
 
 
 void setup() {
-  setup_M5();
+#ifdef __M5_PAPER__
+  pScrPrincipal = new  pantalla_M5();
+#endif
 
   SPI.begin(14, 13, 12, 4);
   SD.begin(4, SPI, 20000000);
@@ -43,12 +50,12 @@ void setup() {
 
   
  
-  scrPrincipal.dibuja_fondo();
-  scrPrincipal.dibuja_top();
-  scrPrincipal.dibuja_cuerpo();
+  pScrPrincipal->dibuja_fondo();
+  pScrPrincipal->dibuja_top();
+  pScrPrincipal->dibuja_cuerpo();
   
-  scrPrincipal.dibuja_menu();
-  scrPrincipal.dibuja_flush();
+  pScrPrincipal->dibuja_menu();
+  pScrPrincipal->dibuja_flush();
 
   writeBatt2SD();
   iLastUpdate=millis();
@@ -66,8 +73,8 @@ void loop() {
   loadJson(szLocalizacion);
   scrPrincipal.dibuja_cuerpo();
  */
-  scrPrincipal.dibuja_top();
-  scrPrincipal.dibuja_flush();
+  pScrPrincipal->dibuja_top();
+  pScrPrincipal->dibuja_flush();
 
   UBaseType_t memoria_usada=uxTaskGetStackHighWaterMark(thEventHandler);
   Serial.printf("memoria usada por thEventHandler %d\n",memoria_usada );
@@ -79,7 +86,7 @@ void loop() {
 
    delay(10000);
   if (millis()-iLastUpdate>20000){
-    scrPrincipal.dibuja_top_apagado();
+    pScrPrincipal->dibuja_top_apagado();
     apagamos();
   } 
       

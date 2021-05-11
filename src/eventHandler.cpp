@@ -1,11 +1,11 @@
-#include <M5EPD.h>
+
 #include "pantalla.hpp"
 
 
 
 extern QueueHandle_t qTouchScreenQueue;
-extern M5EPD_Canvas canvas;
-extern pantalla scrPrincipal;
+
+extern pantalla *pScrPrincipal;
 extern int iLastUpdate;
 extern int iPrimerElemento;
 
@@ -25,37 +25,37 @@ void tskEventHandler(void * parameter ){
                     float fIndice = (pulsacion.y -110) / 35;
                     int iIndice= abs(fIndice);
                     Serial.printf("fIndice %f , iIndice %d\n",fIndice,iIndice);
-                    scrPrincipal.botonListado(iIndice+iPrimerElemento);
+                    pScrPrincipal->botonListado(iIndice+iPrimerElemento);
                     continue;
                 }
 
                 // botones de abajo
                 if ((pulsacion.x<120) && (pulsacion.y>860)){
-                    scrPrincipal.boton1();
+                    pScrPrincipal->boton1();
                     continue;
                 }
                 if ((pulsacion.x>120) && (pulsacion.x<220) && (pulsacion.y>860)){
-                    scrPrincipal.boton2();
+                    pScrPrincipal->boton2();
                     continue;
                 }
                 if ((pulsacion.x>220) && (pulsacion.x<320) && (pulsacion.y>860)){
-                    scrPrincipal.boton3();
+                    pScrPrincipal->boton3();
                     continue;
                 }
                 if ((pulsacion.x>320) && (pulsacion.x<420) && (pulsacion.y>860)){
-                    scrPrincipal.boton4();
+                    pScrPrincipal->boton4();
                     continue;
                 }
                 if ((pulsacion.x>420) && (pulsacion.y>860)){
-                    scrPrincipal.boton5();
+                    pScrPrincipal->boton5();
                 }
             }
             if (pulsacion.id==10){
                 if(pulsacion.x==1){
-                    scrPrincipal.pgUp();
+                    pScrPrincipal->pgUp();
                 }
                 if(pulsacion.x==2){
-                    scrPrincipal.pgDown();
+                    pScrPrincipal->pgDown();
                 }
             }
         }

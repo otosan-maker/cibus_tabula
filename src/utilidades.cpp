@@ -1,6 +1,6 @@
-#include <M5EPD.h>
 #include "producto.hpp"
 #include "cal_interfaces.h"
+#include <SD.h>
 
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP  600        /* Time ESP32 will go to sleep (in seconds) */
@@ -44,22 +44,22 @@ void guardaEstado(){
 
 
 void apagamos(){
-  rtc_time_t RTCtime;
-  M5.RTC.getTime(&RTCtime);
+  struct tm mTime ;
+  getTimeM5(&mTime);
   
   guardaEstado();
   writeBatt2SD();
-  if ((RTCtime.hour>22) || (RTCtime.hour<6) ){
+  if ((mTime.tm_hour>22) || (mTime.tm_hour<6) ){
     Serial.printf("shutdown gordo!");
-    msg2BatteryLog("apagado largo"+RTCtime.hour);
+    msg2BatteryLog("apagado largo "+mTime.tm_hour);
     delay(500);
-    M5.shutdown(18000);
+    apagarM5(18000);
 
   }else{
     Serial.printf("shutdown pequeño");
-    msg2BatteryLog("apagado pequeño"+RTCtime.hour);
+    msg2BatteryLog("apagado pequeño "+mTime.tm_hour);
     delay(500);
-    M5.shutdown(3600); 
+    apagarM5(3600); 
   }
     
   Serial.printf("DeepSleep ");

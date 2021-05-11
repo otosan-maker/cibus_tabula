@@ -1,5 +1,5 @@
 
-
+#include "time.h"
 
 
 void tskTouchScreen(void * parameter );
@@ -21,3 +21,6 @@ void Consumidos();
 void consumido2SD(const char* szURL);
 
 void print_wakeup_reason();
+
+ void  getTimeM5(struct tm *myTm);
+ void apagarM5(int iDuracion);
