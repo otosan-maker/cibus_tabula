@@ -24,24 +24,18 @@ pantalla_lilygo :: pantalla_lilygo(){
     epd_clear();
     
     epd_poweroff();
-
-
-
-    M5.begin(true,true,true,true,true);
-    M5.EPD.SetRotation(90);
-    M5.TP.SetRotation(90);
-    M5.EPD.Clear(true);
-    M5.RTC.begin();
-    canvas.createCanvas(540, 960);
 }
 
 void pantalla_lilygo::dibuja_fondo(){
-    canvas.fillRect(0,50,540,7,15);
-    canvas.fillRect(0,850,540,7,15);
+    //canvas.fillRect(0,50,540,7,15);
+    epd_fill_rect(0, 50 , 540, 7, 255, NULL);
+    //canvas.fillRect(0,850,540,7,15);
+    epd_fill_rect(0, 850 , 540, 7, 255, NULL);
 }
 
 void pantalla_lilygo::dibuja_top_apagado(){
-    canvas.fillRect(315,10,24,24,0);
+    //canvas.fillRect(315,10,24,24,0);
+    epd_fill_rect(315,10,24,24, 0, NULL);
     canvas.drawPngFile(SD,"/img/sleep.png",315,10);
     canvas.pushCanvas(0,0,UPDATE_MODE_GC16 );
 }
@@ -83,13 +77,15 @@ void pantalla_lilygo::set_canvas(M5EPD_Canvas *ppCanvas){
 
 void pantalla_lilygo::dibuja_cuerpo(){
     char szLocal[32];
-    canvas.fillRect(0,60,560,790,0);
-    canvas.setTextSize(4);
+    //canvas.fillRect(0,60,560,790,0);
+    epd_fill_rect(0,60,560,790, 0, NULL);
+    //canvas.setTextSize(4);
     strcpy(szLocal,vProductos[0].m_localizacion);
     szLocal[0]=toupper(szLocal[0]);
     canvas.drawString( szLocal, 150, 65);
-    canvas.fillRect(10,102,500,3,15);
-    canvas.setTextSize(3);
+    //canvas.fillRect(10,102,500,3,15);
+    epd_fill_rect(10,102,500,3, 255, NULL);
+    //canvas.setTextSize(3);
     for(int i =iPrimerElemento;(i<20+iPrimerElemento);i++){
         int iLocalizacion = i - iPrimerElemento;
         if(vProductos[i].m_seleccionado)
@@ -97,9 +93,16 @@ void pantalla_lilygo::dibuja_cuerpo(){
         else
             canvas.drawPngFile(SD,"/img/radio_button_unchecked.png", 20, 110+iLocalizacion*35);
         //canvas.drawPngFile(SD,"/img/despierto.png", 20, 110+i*35);
-        canvas.drawString( vProductos[i].m_nombreProducto, 50, 110+iLocalizacion*35);
-        canvas.drawString( vProductos[i].m_f_alta, 340, 110+iLocalizacion*35);
-        canvas.fillRect(20,140+iLocalizacion*35,500,2,15);
+        
+        int cursor_x = 50;
+        int cursor_y = 110+iLocalizacion*35;
+        //canvas.drawString( vProductos[i].m_nombreProducto, 50, 110+iLocalizacion*35);
+        writeln((GFXfont *)&FiraSans,  vProductos[i].m_nombreProducto, &cursor_x, &cursor_y, NULL);
+        cursor_x = 340;
+        //canvas.drawString( vProductos[i].m_f_alta, 340, 110+iLocalizacion*35);
+        writeln((GFXfont *)&FiraSans, vProductos[i].m_f_alta, &cursor_x, &cursor_y, NULL);
+        //canvas.fillRect(20,140+iLocalizacion*35,500,2,15);
+        epd_fill_rect(20, 140+iLocalizacion*35 , 35, 500, 255, NULL);
     }
    
 }
