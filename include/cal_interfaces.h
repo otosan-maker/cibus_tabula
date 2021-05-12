@@ -24,3 +24,6 @@ void print_wakeup_reason();
 
  void  getTimeM5(struct tm *myTm);
  void apagarM5(int iDuracion);
+
+ void  getTimeLilygo(struct tm *myTm);
+ void apagarLiligo(int iDuracion);
