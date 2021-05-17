@@ -21,6 +21,10 @@ class pantalla{
     void pgUp();
     void pgDown();
     void botonListado(int iIndicePulsado);
+
+    void write(char * szTexto,int x, int y);
+    void drawBMP(char *szFile,int x, int y);
+    void drawRectangle(int x,int y,int width,int heigth,int color);
 };
 
 #endif

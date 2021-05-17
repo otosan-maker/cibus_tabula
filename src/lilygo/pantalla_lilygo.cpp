@@ -12,13 +12,14 @@ extern char     *szgLocalizaciones[];
 
 
 pantalla_lilygo :: pantalla_lilygo(){
-    epd_init();
-    framebuffer = (uint8_t *)ps_calloc(sizeof(uint8_t), EPD_WIDTH * EPD_HEIGHT / 2);
-    if (!framebuffer) {
-        Serial.println("alloc memory failed !!!");
-        while (1);
-    }
-    memset(framebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
+    
+    
+
+    epd_init(EPD_OPTIONS_DEFAULT);
+    hl = epd_hl_init(WAVEFORM);
+    epd_set_rotation(orientation);
+    framebuffer = epd_hl_get_framebuffer(&hl);
+
 
     epd_poweron();
     epd_clear();
@@ -28,81 +29,80 @@ pantalla_lilygo :: pantalla_lilygo(){
 
 void pantalla_lilygo::dibuja_fondo(){
     //canvas.fillRect(0,50,540,7,15);
-    epd_fill_rect(0, 50 , 540, 7, 255, NULL);
+    drawRectangle(0, 50 , 540, 7, 255);
     //canvas.fillRect(0,850,540,7,15);
-    epd_fill_rect(0, 850 , 540, 7, 255, NULL);
+    drawRectangle(0, 850 , 540, 7, 255);
 }
 
 void pantalla_lilygo::dibuja_top_apagado(){
     //canvas.fillRect(315,10,24,24,0);
-    epd_fill_rect(315,10,24,24, 0, NULL);
-    canvas.drawPngFile(SD,"/img/sleep.png",315,10);
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16 );
+    drawRectangle(315,10,24,24, 0 );
+    drawBMP("/img/sleep.png",315,10);
 }
 
 void pantalla_lilygo::dibuja_top(){
     char strTmp[100];
-    rtc_time_t RTCtime;
-    rtc_date_t RTCDate;
+    //rtc_time_t RTCtime;
+    //rtc_date_t RTCDate;
+    struct tm myTm;
 
-    canvas.setTextSize(3);
-    sprintf(strTmp,"%d",M5.getBatteryVoltage());
-    canvas.drawString(strTmp, 360, 14);
-    if (M5.getBatteryVoltage()>4250){
-         canvas.drawBmpFile(SD,"/img/bateria_4.bmp",450,10);
-    }else if (M5.getBatteryVoltage()>4000){
-         canvas.drawBmpFile(SD,"/img/bateria_3.bmp",450,10);
-    }else if (M5.getBatteryVoltage()>3750){
-         canvas.drawBmpFile(SD,"/img/bateria_2.bmp",450,10);
-    }else if (M5.getBatteryVoltage()>3400){
-         canvas.drawBmpFile(SD,"/img/bateria_1.bmp",450,10);
+    //canvas.setTextSize(3);
+    //int iVoltaje=M5.getBatteryVoltage();
+    int iVoltaje=4001;
+    sprintf(strTmp,"%d",iVoltaje);
+    write(strTmp, 360, 14);
+    if (iVoltaje>4250){
+         drawBMP("/img/bateria_4.bmp",450,10);
+    }else if (iVoltaje>4000){
+         drawBMP("/img/bateria_3.bmp",450,10);
+    }else if (iVoltaje>3750){
+         drawBMP("/img/bateria_2.bmp",450,10);
+    }else if (iVoltaje>3400){
+         drawBMP("/img/bateria_1.bmp",450,10);
     }else{
-         canvas.drawBmpFile(SD,"/img/bateria_4.bmp",450,10);
+         drawBMP("/img/bateria_4.bmp",450,10);
     }
-    canvas.drawPngFile(SD,"/img/despierto.png",315,10);
+    drawBMP("/img/despierto.png",315,10);
 
-    M5.RTC.getTime(&RTCtime);
-    M5.RTC.getDate(&RTCDate);
-    
-    sprintf(strTmp,"%02d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
-    canvas.drawString(strTmp, 10, 14);
-    
+    //M5.RTC.getTime(&RTCtime);
+    //M5.RTC.getDate(&RTCDate);
+    getTimeLilygo(&myTm);
+    sprintf(strTmp,"%02d/%02d/%d %d:%02d",myTm.tm_mday ,myTm.tm_mon,myTm.tm_year,myTm.tm_hour,myTm.tm_min );
+    write(strTmp, 10, 14);  
 }
 
-void pantalla_lilygo::set_canvas(M5EPD_Canvas *ppCanvas){
-    //pCanvas=ppCanvas;
-}
+
 
 
 
 void pantalla_lilygo::dibuja_cuerpo(){
     char szLocal[32];
     //canvas.fillRect(0,60,560,790,0);
-    epd_fill_rect(0,60,560,790, 0, NULL);
+    drawRectangle(0,60,560,790, 0);
     //canvas.setTextSize(4);
     strcpy(szLocal,vProductos[0].m_localizacion);
     szLocal[0]=toupper(szLocal[0]);
-    canvas.drawString( szLocal, 150, 65);
+    write( szLocal, 150, 65);
     //canvas.fillRect(10,102,500,3,15);
-    epd_fill_rect(10,102,500,3, 255, NULL);
+    drawRectangle(10,102,500,3, 255);
     //canvas.setTextSize(3);
     for(int i =iPrimerElemento;(i<20+iPrimerElemento);i++){
         int iLocalizacion = i - iPrimerElemento;
         if(vProductos[i].m_seleccionado)
-            canvas.drawPngFile(SD,"/img/radio_button_checked.png", 20, 110+iLocalizacion*35);
+            drawBMP("/img/radio_button_checked.png", 20, 110+iLocalizacion*35);
         else
-            canvas.drawPngFile(SD,"/img/radio_button_unchecked.png", 20, 110+iLocalizacion*35);
+            drawBMP("/img/radio_button_unchecked.png", 20, 110+iLocalizacion*35);
         //canvas.drawPngFile(SD,"/img/despierto.png", 20, 110+i*35);
         
         int cursor_x = 50;
         int cursor_y = 110+iLocalizacion*35;
         //canvas.drawString( vProductos[i].m_nombreProducto, 50, 110+iLocalizacion*35);
-        writeln((GFXfont *)&FiraSans,  vProductos[i].m_nombreProducto, &cursor_x, &cursor_y, NULL);
+        write( vProductos[i].m_nombreProducto, cursor_x, cursor_y);
         cursor_x = 340;
         //canvas.drawString( vProductos[i].m_f_alta, 340, 110+iLocalizacion*35);
-        writeln((GFXfont *)&FiraSans, vProductos[i].m_f_alta, &cursor_x, &cursor_y, NULL);
+        write(vProductos[i].m_f_alta, cursor_x, cursor_y);
         //canvas.fillRect(20,140+iLocalizacion*35,500,2,15);
-        epd_fill_rect(20, 140+iLocalizacion*35 , 35, 500, 255, NULL);
+        drawRectangle(20, 140+iLocalizacion*35 , 35, 500, 255);
     }
    
 }
@@ -112,18 +112,21 @@ void pantalla_lilygo::dibuja_cuerpo(){
 void pantalla_lilygo::dibuja_menu(){
     char szFile[128];
     sprintf(szFile,"/img/%s.bmp",szgLocalizaciones[0]);
-    canvas.drawBmpFile(SD,szFile,20,861);
+    drawBMP(szFile,20,861);
     sprintf(szFile,"/img/%s.bmp",szgLocalizaciones[1]);
-    canvas.drawBmpFile(SD,szFile,120,861);
+    drawBMP(szFile,120,861);
     sprintf(szFile,"/img/%s.bmp",szgLocalizaciones[2]);
-    canvas.drawBmpFile(SD,szFile,220,861);
-    canvas.drawBmpFile(SD,"/img/descarga.bmp",320,861);
-    canvas.drawBmpFile(SD,"/img/apagar.bmp",420,861);
+    drawBMP(szFile,220,861);
+    drawBMP("/img/descarga.bmp",320,861);
+    drawBMP("/img/apagar.bmp",420,861);
 }
 
 
 void pantalla_lilygo::dibuja_flush(){
-    canvas.pushCanvas(0,0,UPDATE_MODE_DU4);
+    epd_poweron();
+    epd_hl_update_screen(&hl, MODE_GC16, temperature);
+    
+    epd_poweroff();
 }
 
 
@@ -132,13 +135,13 @@ void pantalla_lilygo::boton1(){
     strcpy(szLocalizacion,szgLocalizaciones[0]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16    );
+    dibuja_flush( );
 }
 void pantalla_lilygo::boton2(){
     strcpy(szLocalizacion,szgLocalizaciones[1]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16    );
+    dibuja_flush( );
     
 }
 
@@ -146,8 +149,7 @@ void pantalla_lilygo::boton3(){
     strcpy(szLocalizacion,szgLocalizaciones[2]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16    );
-
+    dibuja_flush( );
 }
 void pantalla_lilygo::boton4(){
     InitWifi();
@@ -156,13 +158,13 @@ void pantalla_lilygo::boton4(){
     loadJson(szLocalizacion);
     CloseWifi();
     dibuja_cuerpo();
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16    );
+    dibuja_flush( );
 }
 void pantalla_lilygo::boton5(){
     //canvas.drawPngFile(SD,"/img/despierto.png",315,10);
-    canvas.fillRect(315,10,24,24,0);
-    canvas.drawPngFile(SD,"/img/sleep.png",315,10);
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16 );
+    drawRectangle(315,10,24,24,0);
+    drawBMP("/img/sleep.png",315,10);
+    dibuja_flush( );
     apagamos();
 }
 
@@ -195,5 +197,18 @@ void pantalla_lilygo::botonListado(int iIndicePulsado){
 
     dibuja_cuerpo();
     dibuja_flush();
+
+}
+
+void pantalla_lilygo::drawRectangle(int x,int y,int width,int heigth,int color){
+
+}
+
+
+void pantalla_lilygo::drawBMP(char *szFile,int x, int y){
+
+}
+
+void pantalla_lilygo::write(char * szTexto,int x, int y){
 
 }
