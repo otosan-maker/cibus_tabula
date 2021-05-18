@@ -13,18 +13,6 @@ extern char     *szgLocalizaciones[];
 
 pantalla_lilygo :: pantalla_lilygo(){
     
-    
-
-    epd_init(EPD_OPTIONS_DEFAULT);
-    hl = epd_hl_init(WAVEFORM);
-    epd_set_rotation(orientation);
-    framebuffer = epd_hl_get_framebuffer(&hl);
-
-
-    epd_poweron();
-    epd_clear();
-    
-    epd_poweroff();
 }
 
 void pantalla_lilygo::dibuja_fondo(){
@@ -123,10 +111,7 @@ void pantalla_lilygo::dibuja_menu(){
 
 
 void pantalla_lilygo::dibuja_flush(){
-    epd_poweron();
-    epd_hl_update_screen(&hl, MODE_GC16, temperature);
-    
-    epd_poweroff();
+  
 }
 
 

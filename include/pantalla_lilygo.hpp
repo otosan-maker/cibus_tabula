@@ -1,7 +1,6 @@
 #ifndef __PANTALLA_LILYGO__
 #define __PANTALLA_LILYGO__
-#include "epd_driver.h"
-#include "epd_highlevel.h"
+
 
 #include "pantalla.hpp"
 #include "jsonCom.hpp"
@@ -22,10 +21,7 @@
 class pantalla_lilygo : public pantalla{
 
     public:
-    EpdiyHighlevelState hl;
-    EpdRotation orientation = EPD_ROT_INVERTED_PORTRAIT;
-    uint8_t *framebuffer;
-    int temperature = 20;
+   
 
     pantalla_lilygo();
     
