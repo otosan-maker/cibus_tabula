@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <SD.h>
+
 #include "pantalla.hpp"
 #include "pantalla_M5.hpp"
 #include "pantalla_lilygo.hpp"
@@ -27,21 +27,41 @@ QueueHandle_t qTouchScreenQueue;
 
 
 void setup() {
+  File fEstado;
+
+  Serial.begin(115200);
+  Serial.println("Inicializamos  1");
+  delay(60);
 #ifdef CONFIG__M5_PAPER__
   pScrPrincipal = new  pantalla_M5();
-#endif
-pScrPrincipal = new  pantalla_lilygo();
-
   SPI.begin(14, 13, 12, 4);
   SD.begin(4, SPI, 20000000);
-  cargaEstado();
-  print_wakeup_reason();
+  fEstado = SD.open(FILE_LAST_STATE,"r");
+  cargaEstado(fEstado);
+  fEstado.close();
+#else
+  Serial.printf("Inicializamos 2 %d\n",millis());
+   if(!SPIFFS.begin(true)){
+        Serial.println("An Error has occurred while mounting SPIFFS");
+        delay(20);
+  }
+  pScrPrincipal = new  pantalla_lilygo();
+  Serial.printf("Inicializamos  3 %d\n",millis());
+  fEstado = SPIFFS.open(FILE_LAST_STATE,"r");
+  cargaEstado(fEstado);
+  Serial.printf("Inicializamos  4 %d\n",millis());
+  fEstado.close();
+#endif
 
+  
+
+  print_wakeup_reason();
+  Serial.printf("Inicializamos  %d\n",millis());
   InitWifi();
   Sincroniza_download(szLocalizacion);
   loadJson(szLocalizacion);
   CloseWifi();
-
+  Serial.printf("Inicializamos  %d\n",millis());
   //Creamos las colas de trabajo
   qTouchScreenQueue = xQueueCreate( 10, sizeof( tp_finger_t ) );
   // arrancamos las tareas

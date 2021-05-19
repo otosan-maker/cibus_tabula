@@ -12,9 +12,10 @@ extern char     szLocalizacion[25];
 extern char     *szgLocalizaciones[];
 
 
-void cargaEstado(){
+
+void cargaEstado(File fEstado){
   
-  File fEstado = SD.open("/configuracion/estado.txt","r");
+  //File fEstado = SD.open("/configuracion/estado.txt","r");
   String strTmp;
   
   Serial.println("cargamos el estado");
@@ -32,11 +33,18 @@ void cargaEstado(){
   else  
     strcpy(szLocalizacion,szgLocalizaciones[0]); 
   
-  fEstado.close();
+  //fEstado.close();
 }
+
+
+
 void guardaEstado(){
   Serial.println("Guardamos el estado");
+#ifdef CONFIG__M5_PAPER__
   File fEstado = SD.open("/configuracion/estado.txt","w");
+#else
+  File fEstado = SPIFFS.open("/configuracion/estado.txt","w");
+#endif
   fEstado.printf("%d\n",iPrimerElemento);
   fEstado.printf("%s\n",szLocalizacion);
   fEstado.close();

@@ -1,6 +1,8 @@
 
 #include "time.h"
+#include <SD.h>
 
+#define FILE_LAST_STATE "/configuracion/estado.txt"
 
 void tskTouchScreen(void * parameter );
 void tskEventHandler(void * parameter );
@@ -14,7 +16,7 @@ void writeBatt2SD();
 void msg2BatteryLog(const char* );
 
 void guardaEstado();
-void cargaEstado();
+void cargaEstado(File fEstado);
 void apagamos();
 
 void Consumidos();
