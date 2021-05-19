@@ -1,10 +1,9 @@
-#define __M5_PAPER__
-
 #include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
 #include "pantalla.hpp"
 #include "pantalla_M5.hpp"
+#include "pantalla_lilygo.hpp"
 #include "jsonCom.hpp"
 #include "cal_interfaces.h"
 
@@ -28,9 +27,10 @@ QueueHandle_t qTouchScreenQueue;
 
 
 void setup() {
-#ifdef __M5_PAPER__
+#ifdef CONFIG__M5_PAPER__
   pScrPrincipal = new  pantalla_M5();
 #endif
+pScrPrincipal = new  pantalla_lilygo();
 
   SPI.begin(14, 13, 12, 4);
   SD.begin(4, SPI, 20000000);

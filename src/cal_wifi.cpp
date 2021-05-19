@@ -123,6 +123,8 @@ void Consumidos(){
           Serial.println(szTmp);
           http.begin(szTmp);
           int httpResponseCode = http.GET();
+          if (httpResponseCode!=0)
+            Serial.printf("Obtenemos el codigo HTTP %d\n", httpResponseCode);
           http.end();
           consumido2SD( szTmp);
         }

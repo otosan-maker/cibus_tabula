@@ -197,15 +197,22 @@ void pantalla_lilygo::botonListado(int iIndicePulsado){
 
 }
 
-void pantalla_lilygo::drawRectangle(int x,int y,int width,int heigth,int color){
-
+void pantalla_lilygo::drawRectangle(int xRect,int yRect,int wRect,int hRect,int color){
+        EpdRect rect = {
+        .x = xRect,
+        .y = yRect,
+        .width = wRect,
+        .height = hRect,
+    };
+    epd_draw_rect(rect, color, framebuffer);
 }
 
 
-void pantalla_lilygo::drawBMP(char *szFile,int x, int y){
-
+void pantalla_lilygo::drawBMP(const char *szFile,int x, int y){
+    drawBitmap_SD(szFile,  x,  y,framebuffer);
 }
 
-void pantalla_lilygo::write(char * szTexto,int x, int y){
-
+void pantalla_lilygo::write(char * szTexto,int cursor_x, int cursor_y){
+    EpdFontProperties font_props = epd_font_properties_default();
+    epd_write_string(&FiraSans_12, szTexto , &cursor_x, &cursor_y, framebuffer, &font_props);
 }

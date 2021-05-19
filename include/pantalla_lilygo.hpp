@@ -3,6 +3,8 @@
 
 #include "epd_driver.h"
 #include "epd_highlevel.h"
+#include "Firasans/Firasans.h"
+#include "readbmp.hpp"
 #include "pantalla.hpp"
 #include "jsonCom.hpp"
 #include "producto.hpp"
@@ -14,8 +16,6 @@
 #define SD_MOSI             13
 #define SD_SCLK             14
 #define SD_CS               15
-
-#define CONFIG_EPD_DISPLAY_TYPE_ED047TC1
 
 #define WAVEFORM EPD_BUILTIN_WAVEFORM
 
@@ -45,7 +45,7 @@ class pantalla_lilygo : public pantalla{
     void botonListado(int iIndicePulsado);
 
     void write(char * szTexto,int x, int y);
-    void drawBMP(char *szFile,int x, int y);
+    void drawBMP(const char *szFile,int x, int y);
     void drawRectangle(int x,int y,int width,int heigth,int color);
 };
 
