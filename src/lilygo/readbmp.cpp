@@ -56,7 +56,7 @@ int drawBitmap_SD(const char *filename, int x, int y,uint8_t *framebuffer){
                     file.seek(pos);
                     buffidx = sizeof(buffer); // force buffer reload
                 }
-                uint8_t bits;
+                uint8_t bits=0;
                         for (uint16_t col = 0; col < w; col++) { // for each pixel
                             // Time to read more pixel data?
                             if (buffidx >= sizeof(buffer)){
