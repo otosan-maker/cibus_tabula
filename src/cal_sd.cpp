@@ -13,7 +13,12 @@ void writeBatt2SD(){
   sprintf(strTmp,"%d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
   
   File myFile;
+#ifdef CONFIG__M5_PAPER__
   myFile = SD.open("/bateria.txt", "a");
+#else
+  myFile = SPIFFS.open("/bateria.txt", "a");
+#endif
+ 
 
   // if the file opened okay, write to it:
   if (myFile) {
@@ -38,7 +43,11 @@ void consumido2SD(const char* szURL){
   sprintf(strTmp,"%d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
   
   File myFile;
+#ifdef CONFIG__M5_PAPER__
   myFile = SD.open("/consumidos.txt", "a");
+#else
+  myFile = SPIFFS.open("/consumidos.txt", "a");
+#endif
   if (myFile) {
     myFile.printf("%s.- Consumo %s.\n", strTmp ,szURL);
     myFile.close();
@@ -56,6 +65,12 @@ void msg2BatteryLog(const char* szMsg){
   sprintf(strTmp,"%d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
   
   File myFile;
+#ifdef CONFIG__M5_PAPER__
+  myFile = SD.open("/consumidos.txt", "a");
+#else
+  myFile = SPIFFS.open("/consumidos.txt", "a");
+#endif
+
   myFile = SD.open("/mensajes.txt", "a");
   if (myFile) {
     myFile.printf("%s.- %s.\n", strTmp ,szMsg);
