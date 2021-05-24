@@ -48,7 +48,7 @@ void pantalla_lilygo::dibuja_top(){
 
     //canvas.setTextSize(3);
     //int iVoltaje=M5.getBatteryVoltage();
-    int iVoltaje=4001;
+    int iVoltaje=getVolt();
     sprintf(strTmp,"%d",iVoltaje);
     write(strTmp, 360, 14);
     if (iVoltaje>4250){
