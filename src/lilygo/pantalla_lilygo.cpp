@@ -12,6 +12,7 @@ extern char     *szgLocalizaciones[];
 
 
 pantalla_lilygo :: pantalla_lilygo(){
+    Serial.println("pantalla_lilygo ::: Inicializamos \n");
     epd_init(EPD_OPTIONS_DEFAULT);
     hl = epd_hl_init(WAVEFORM);
     epd_set_rotation(orientation);
@@ -25,16 +26,18 @@ pantalla_lilygo :: pantalla_lilygo(){
 }
 
 void pantalla_lilygo::dibuja_fondo(){
+    //Serial.println("pantalla_lilygo ::: Dibujamos fondo \n");
     //canvas.fillRect(0,50,540,7,15);
-    drawRectangle(0, 50 , 540, 7, 255);
+    fillRectangle(0, 50 , 540, 10, 0);
     //canvas.fillRect(0,850,540,7,15);
-    drawRectangle(0, 850 , 540, 7, 255);
+    fillRectangle(0, 850 , 540, 10, 0);
+    dibuja_flush();
 }
 
 void pantalla_lilygo::dibuja_top_apagado(){
     //canvas.fillRect(315,10,24,24,0);
-    drawRectangle(315,10,24,24, 0 );
-    drawBMP("/img/sleep.png",315,10);
+    fillRectangle(315,10,24,24, 255 );
+    drawBMP("/img/sleep.bmp",315,10);
 }
 
 void pantalla_lilygo::dibuja_top(){
@@ -59,7 +62,7 @@ void pantalla_lilygo::dibuja_top(){
     }else{
          drawBMP("/img/bateria_4.bmp",450,10);
     }
-    drawBMP("/img/despierto.png",315,10);
+    drawBMP("/img/despierto.bmp",315,10);
 
     //M5.RTC.getTime(&RTCtime);
     //M5.RTC.getDate(&RTCDate);
@@ -75,21 +78,20 @@ void pantalla_lilygo::dibuja_top(){
 void pantalla_lilygo::dibuja_cuerpo(){
     char szLocal[32];
     //canvas.fillRect(0,60,560,790,0);
-    drawRectangle(0,60,560,790, 0);
+    fillRectangle(0,60,560,790, 255);
     //canvas.setTextSize(4);
     strcpy(szLocal,vProductos[0].m_localizacion);
     szLocal[0]=toupper(szLocal[0]);
     write( szLocal, 150, 65);
     //canvas.fillRect(10,102,500,3,15);
-    drawRectangle(10,102,500,3, 255);
+    fillRectangle(10,102,500,3, 0);
     //canvas.setTextSize(3);
     for(int i =iPrimerElemento;(i<20+iPrimerElemento);i++){
         int iLocalizacion = i - iPrimerElemento;
         if(vProductos[i].m_seleccionado)
-            drawBMP("/img/radio_button_checked.png", 20, 110+iLocalizacion*35);
+            drawBMP("/img/radio_button_checked.bmp", 20, 110+iLocalizacion*35);
         else
-            drawBMP("/img/radio_button_unchecked.png", 20, 110+iLocalizacion*35);
-        //canvas.drawPngFile(SD,"/img/despierto.png", 20, 110+i*35);
+            drawBMP("/img/radio_button_unchecked.bmp", 20, 110+iLocalizacion*35);
         
         int cursor_x = 50;
         int cursor_y = 110+iLocalizacion*35;
@@ -99,7 +101,7 @@ void pantalla_lilygo::dibuja_cuerpo(){
         //canvas.drawString( vProductos[i].m_f_alta, 340, 110+iLocalizacion*35);
         write(vProductos[i].m_f_alta, cursor_x, cursor_y);
         //canvas.fillRect(20,140+iLocalizacion*35,500,2,15);
-        drawRectangle(20, 140+iLocalizacion*35 , 35, 500, 255);
+        fillRectangle(20, 140+iLocalizacion*35 , 500, 2, 0);
     }
    
 }
@@ -158,9 +160,8 @@ void pantalla_lilygo::boton4(){
     dibuja_flush( );
 }
 void pantalla_lilygo::boton5(){
-    //canvas.drawPngFile(SD,"/img/despierto.png",315,10);
-    drawRectangle(315,10,24,24,0);
-    drawBMP("/img/sleep.png",315,10);
+    fillRectangle(315,10,24,24,255);
+    drawBMP("/img/sleep.bmp",315,10);
     dibuja_flush( );
     apagamos();
 }
@@ -207,12 +208,27 @@ void pantalla_lilygo::drawRectangle(int xRect,int yRect,int wRect,int hRect,int 
     epd_draw_rect(rect, color, framebuffer);
 }
 
+void pantalla_lilygo::fillRectangle(int xRect,int yRect,int wRect,int hRect,int color){
+        EpdRect rect = {
+        .x = xRect,
+        .y = yRect,
+        .width = wRect,
+        .height = hRect,
+    };
+    epd_fill_rect(rect, color, framebuffer);
+}
+
 
 void pantalla_lilygo::drawBMP(const char *szFile,int x, int y){
     drawBitmap_SD(szFile,  x,  y,framebuffer);
 }
 
+#define FONT_Y_SIZE 20
+
 void pantalla_lilygo::write(char * szTexto,int cursor_x, int cursor_y){
+    int cX=cursor_x;
+    int cY=cursor_y+FONT_Y_SIZE;
+    //Serial.printf("Cadena  %d, %d ---  %s\n",cursor_x,cursor_y,szTexto);
     EpdFontProperties font_props = epd_font_properties_default();
-    epd_write_string(&FiraSans_12, szTexto , &cursor_x, &cursor_y, framebuffer, &font_props);
+    epd_write_string(&FiraSans_12, szTexto , &cX, &cY, framebuffer, &font_props);
 }

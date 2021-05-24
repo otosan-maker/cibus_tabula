@@ -8,10 +8,11 @@
 #include "cal_interfaces.h"
 
 
-
-pantalla *pScrPrincipal= NULL;
-
-
+#ifdef CONFIG__M5_PAPER__
+pantalla_M5 *pScrPrincipal= NULL;
+#else
+pantalla_lilygo *pScrPrincipal= NULL;
+#endif
 
 extern char     szLocalizacion[25];
 extern int wifi_status ;
@@ -40,28 +41,30 @@ void setup() {
   cargaEstado(fEstado);
   fEstado.close();
 #else
-  Serial.printf("Inicializamos 2 %d\n",millis());
+  Serial.printf("Inicializamos 2 %lu\n",millis());
    if(!SPIFFS.begin(true)){
         Serial.println("An Error has occurred while mounting SPIFFS");
         delay(20);
   }
   pScrPrincipal = new  pantalla_lilygo();
-  Serial.printf("Inicializamos  3 %d\n",millis());
+  Serial.printf("Inicializamos  3 %lu\n",millis());
   fEstado = SPIFFS.open(FILE_LAST_STATE,"r");
   cargaEstado(fEstado);
-  Serial.printf("Inicializamos  4 %d\n",millis());
+  Serial.printf("Inicializamos  4 %lu\n",millis());
   fEstado.close();
 #endif
 
   
 
   print_wakeup_reason();
-  Serial.printf("Inicializamos  %d\n",millis());
+  Serial.printf("Inicializamos  5 %lu\n",millis());
   InitWifi();
+  Serial.printf("Inicializamos  6 %lu\n",millis());
   Sincroniza_download(szLocalizacion);
+  Serial.printf("Inicializamos  7 %lu\n",millis());
   loadJson(szLocalizacion);
   CloseWifi();
-  Serial.printf("Inicializamos  %d\n",millis());
+  Serial.printf("Inicializamos  8 %lu\n",millis());
   //Creamos las colas de trabajo
   qTouchScreenQueue = xQueueCreate( 10, sizeof( tp_finger_t ) );
   // arrancamos las tareas
@@ -69,14 +72,14 @@ void setup() {
   xTaskCreatePinnedToCore(tskTouchScreen, "EventHandler",5000,NULL,1,&thTouchScreenHandler,tskNO_AFFINITY );
 
   
- 
+  Serial.printf("Inicializamos  9 %lu\n",millis());
   pScrPrincipal->dibuja_fondo();
   pScrPrincipal->dibuja_top();
   pScrPrincipal->dibuja_cuerpo();
   
   pScrPrincipal->dibuja_menu();
   pScrPrincipal->dibuja_flush();
-
+  Serial.printf("Inicializamos  10 %lu\n",millis());
   writeBatt2SD();
   iLastUpdate=millis();
 }
@@ -105,7 +108,7 @@ void loop() {
   Serial.printf("last update %d\n",int(millis()-iLastUpdate));
 
    delay(10000);
-  if (millis()-iLastUpdate>20000){
+  if (millis()-iLastUpdate>200000){
     pScrPrincipal->dibuja_top_apagado();
     apagamos();
   } 

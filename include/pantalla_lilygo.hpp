@@ -47,6 +47,7 @@ class pantalla_lilygo : public pantalla{
     void write(char * szTexto,int x, int y);
     void drawBMP(const char *szFile,int x, int y);
     void drawRectangle(int x,int y,int width,int heigth,int color);
+    void fillRectangle(int x,int y,int width,int heigth,int color);
 };
 
 #endif

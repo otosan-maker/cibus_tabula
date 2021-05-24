@@ -1,5 +1,6 @@
 #include <ArduinoJson.h>
 #include <SD.h>
+#include <SPIFFS.h>
 #include  "jsonCom.hpp"
 #include "producto.hpp"
 
@@ -26,8 +27,11 @@ void loadJson(const char*szMiLocalizacion){
     clearvProductos();
     sprintf(szFile,"/despensa/%s.json",szMiLocalizacion);
     // Deserialize the JSON document
-    File fLeemos = SD.open(szFile,"r");
-    
+#ifdef CONFIG__M5_PAPER__
+  File fLeemos = SD.open(szFile,"r");
+#else
+  File fLeemos = SPIFFS.open(szFile,"r");
+#endif
     DeserializationError error = deserializeJson(doc, fLeemos);
  
     // Test if parsing succeeds.

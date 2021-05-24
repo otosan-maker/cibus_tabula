@@ -1,6 +1,7 @@
 #include <wifi.h>
 #include <HTTPClient.h>
 #include <SD.h>
+#include <SPIFFS.h>
 #include "cal_interfaces.h"
 #include "producto.hpp"
 #include "private.hpp"
@@ -16,14 +17,15 @@ extern int      vProductoSize;
 
 void InitWifi(){
   WiFi.mode(WIFI_STA);
+  Serial.printf(" Conectamos a la Wifi %s %s \n",ssid,password);
   WiFi.begin(ssid, password);
 
- for(int i=0;i<10;i++) {
+ for(int i=0;i<20;i++) {
    if(WiFi.status() == WL_CONNECTED) {
      break;
    }
     delay(500);
-    Serial.print(".");
+    Serial.printf("%d",i);
   }
 
   Serial.println("");
@@ -40,7 +42,12 @@ void InitWifi(){
 //  guardamos en la SD la ultima descarga del fichero
 void setUltimaDescarga(String strValue){
   String strLastDownload="";
-  File tmpFile=SD.open("/despensa/last.txt","w");
+  
+#ifdef CONFIG__M5_PAPER__
+  File tmpFile = SD.open("/despensa/last.txt","w");
+#else
+  File tmpFile = SPIFFS.open("/despensa/last.txt","w");
+#endif
   tmpFile.printf("%s",strValue.c_str());
   tmpFile.close();
 }
@@ -50,8 +57,11 @@ void setUltimaDescarga(String strValue){
 //  hemos guardado en la SD la ultima descarga del fichero
 String ultimaDescarga(){
   String strLastDownload="";
-  File tmpFile=SD.open("/despensa/last.txt");
- 
+#ifdef CONFIG__M5_PAPER__
+  File tmpFile = SD.open("/despensa/last.txt","r");
+#else
+  File tmpFile = SPIFFS.open("/despensa/last.txt","r");
+#endif
   strLastDownload=tmpFile.readString();
   Serial.printf("ultimaDescarga %s\n",strLastDownload.c_str());
   tmpFile.close();
@@ -68,13 +78,13 @@ String ultimaModificacion(){
   int httpResponseCode = http.GET();
       
   if (httpResponseCode>0) {
-        //Serial.print("HTTP Response code: ");
-        //Serial.println(httpResponseCode);
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
         payload = http.getString();
-        //Serial.println(payload);
+        Serial.println(payload);
   }else {
-        //Serial.print("Error code: ");
-        //Serial.println(httpResponseCode);
+        Serial.print("Error code: ");
+        Serial.println(httpResponseCode);
   }
   // Free resources
     http.end();
@@ -94,7 +104,11 @@ void descargaLocalizacion(String strLocalizacion){
         //Serial.print("HTTP Response code: ");
         //Serial.println(httpResponseCode);
         String payload = http.getString();
+#ifdef CONFIG__M5_PAPER__
         File tmpFile=SD.open("/despensa/"+strLocalizacion+".json","w");
+#else
+        File tmpFile=SPIFFS.open("/despensa/"+strLocalizacion+".json","w");
+#endif
         tmpFile.printf("%s",payload.c_str());
         tmpFile.close();
         Serial.println(payload);

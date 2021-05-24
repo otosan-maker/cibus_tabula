@@ -12,7 +12,10 @@ extern char     szLocalizacion[25];
 extern char     *szgLocalizaciones[];
 
 void pantalla::dibuja_fondo(){
-   
+    Serial.println("pantalla ::: Dibujamos fondo \n");
+    drawRectangle(0, 50 , 540, 7, 255);
+    drawRectangle(0, 850 , 540, 7, 255);
+    dibuja_flush();
 }
 
 void pantalla::dibuja_top_apagado(){
@@ -75,4 +78,14 @@ void pantalla::pgDown(){
 
 void pantalla::botonListado(int iIndicePulsado){
     
+}
+
+void pantalla::write(char * szTexto,int x, int y){
+
+}
+void pantalla::drawBMP(char *szFile,int x, int y){
+
+}
+void pantalla::drawRectangle(int x,int y,int width,int heigth,int color){
+
 }

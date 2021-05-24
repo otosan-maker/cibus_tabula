@@ -29,3 +29,4 @@ void print_wakeup_reason();
 
  void  getTimeLilygo(struct tm *myTm);
  void apagarLiligo(int iDuracion);
+ int getVolt();

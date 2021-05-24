@@ -18,7 +18,7 @@ int drawBitmap_SD(const char *filename, int x, int y,uint8_t *framebuffer){
 
     // Parse BMP header
     if (read16(file) == 0x4D42){ // BMP signature
-        Serial.println("BMP file");
+        //Serial.println("BMP file");
         uint32_t fileSize = read32(file);
         uint16_t creatorBytes1 = read16(file);
         uint16_t creatorBytes2 = read16(file);
@@ -30,12 +30,12 @@ int drawBitmap_SD(const char *filename, int x, int y,uint8_t *framebuffer){
         uint16_t depth = read16(file); // bits per pixel
         uint32_t format = read32(file);  //metodo de compresion
         if ((planes == 1) && (format == 0)){ // uncompressed is handled
-            Serial.printf("File size: %d\n",fileSize); 
+/*             Serial.printf("File size: %d\n",fileSize); 
             Serial.printf("Image Offset: %d\n",imageOffset); 
             Serial.printf("Creator: %d :: %d\n",creatorBytes1,creatorBytes2); 
             Serial.printf("Header size: %d\n",headerSize); 
             Serial.printf("Bit Depth: %d\n",depth); 
-            Serial.printf("Image size: %d x %d\n",width,height);
+            Serial.printf("Image size: %d x %d\n",width,height); */
             // BMP rows are padded (if needed) to 4-byte boundary
             uint32_t rowSize = (width * depth / 8 + 3) & ~3;
             if (height < 0){
