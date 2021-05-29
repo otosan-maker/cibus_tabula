@@ -12,7 +12,7 @@ extern char     *szgLocalizaciones[];
 
 
 pantalla_lilygo :: pantalla_lilygo(){
-    Serial.println("pantalla_lilygo ::: Inicializamos \n");
+    //Serial.println("pantalla_lilygo ::: Inicializamos \n");
     epd_init(EPD_OPTIONS_DEFAULT);
     hl = epd_hl_init(WAVEFORM);
     epd_set_rotation(orientation);
@@ -31,7 +31,7 @@ void pantalla_lilygo::dibuja_fondo(){
     fillRectangle(0, 50 , 540, 10, 0);
     //canvas.fillRect(0,850,540,7,15);
     fillRectangle(0, 850 , 540, 10, 0);
-    dibuja_flush();
+    //dibuja_flush();
 }
 
 void pantalla_lilygo::dibuja_top_apagado(){
@@ -131,12 +131,15 @@ void pantalla_lilygo::dibuja_flush(){
 
 
 void pantalla_lilygo::boton1(){
+    Serial.println("Boton 1");
     strcpy(szLocalizacion,szgLocalizaciones[0]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
     dibuja_flush( );
 }
+
 void pantalla_lilygo::boton2(){
+    Serial.println("Boton 2");
     strcpy(szLocalizacion,szgLocalizaciones[1]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
@@ -145,12 +148,14 @@ void pantalla_lilygo::boton2(){
 }
 
 void pantalla_lilygo::boton3(){
+    Serial.println("Boton 3");
     strcpy(szLocalizacion,szgLocalizaciones[2]);
     loadJson(szLocalizacion);
     dibuja_cuerpo();
     dibuja_flush( );
 }
 void pantalla_lilygo::boton4(){
+    Serial.println("Boton 4");
     InitWifi();
     Consumidos();
     Sincroniza_download(szLocalizacion);
@@ -160,6 +165,7 @@ void pantalla_lilygo::boton4(){
     dibuja_flush( );
 }
 void pantalla_lilygo::boton5(){
+    Serial.println("Boton 5");
     fillRectangle(315,10,24,24,255);
     drawBMP("/img/sleep.bmp",315,10);
     dibuja_flush( );
@@ -167,6 +173,7 @@ void pantalla_lilygo::boton5(){
 }
 
 void pantalla_lilygo::pgUp(){
+    Serial.println("pgUp");
     iPrimerElemento+=3;
     if(iPrimerElemento>vProductoSize-19)
         iPrimerElemento=vProductoSize-19;
@@ -177,6 +184,7 @@ void pantalla_lilygo::pgUp(){
 }
 
 void pantalla_lilygo::pgDown(){
+    Serial.println("pgDown");
     iPrimerElemento-=3;
     if(iPrimerElemento<0)
         iPrimerElemento=0;
@@ -188,6 +196,7 @@ void pantalla_lilygo::pgDown(){
 
 
 void pantalla_lilygo::botonListado(int iIndicePulsado){
+    Serial.println("botonListado");
     if(vProductos[iIndicePulsado].m_seleccionado)
         vProductos[iIndicePulsado].m_seleccionado=false;
     else  

@@ -28,8 +28,8 @@ void InitWifi(){
     Serial.printf("%d",i);
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
+  //Serial.println("");
+  //Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   wifi_status=1;
@@ -63,7 +63,7 @@ String ultimaDescarga(){
   File tmpFile = SPIFFS.open("/despensa/last.txt","r");
 #endif
   strLastDownload=tmpFile.readString();
-  Serial.printf("ultimaDescarga %s\n",strLastDownload.c_str());
+  //Serial.printf("ultimaDescarga %s\n",strLastDownload.c_str());
   tmpFile.close();
   return strLastDownload;
 }

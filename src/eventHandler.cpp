@@ -1,12 +1,20 @@
 
 #include <Arduino.h>
 #include "pantalla.hpp"
-#include <M5EPD.h>
+#include "pantalla_M5.hpp"
+#include "pantalla_lilygo.hpp"
+
 
 
 extern QueueHandle_t qTouchScreenQueue;
 
-extern pantalla *pScrPrincipal;
+
+#ifdef CONFIG__M5_PAPER__
+extern pantalla_M5 *pScrPrincipal;
+#else
+extern pantalla_lilygo *pScrPrincipal;
+#endif
+
 extern int iLastUpdate;
 extern int iPrimerElemento;
 

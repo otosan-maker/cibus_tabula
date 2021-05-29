@@ -23,7 +23,7 @@ class pantalla_lilygo : public pantalla{
 
     public:
     EpdiyHighlevelState hl;
-    EpdRotation orientation = EPD_ROT_INVERTED_PORTRAIT;
+    EpdRotation orientation = EPD_ROT_PORTRAIT;
     uint8_t *framebuffer;
     int temperature = 20;
 

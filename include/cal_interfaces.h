@@ -5,6 +5,7 @@
 #define FILE_LAST_STATE "/configuracion/estado.txt"
 
 void tskTouchScreen(void * parameter );
+void tskTouchScreen_ttgo(void * parameter );
 void tskEventHandler(void * parameter );
 
 void InitWifi();
