@@ -35,6 +35,7 @@ class pantalla_lilygo : public pantalla{
     void dibuja_cuerpo();
     void dibuja_menu();
     void dibuja_flush();
+    void msg(const char *szText);
     void boton1();
     void boton2();
     void boton3();

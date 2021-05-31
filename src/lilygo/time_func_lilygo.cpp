@@ -16,8 +16,12 @@
 
 }
 
-void apagarLilygo(int iDuracion){
-    
+void apagarLilygo(){
+      
+    // esp_sleep_enable_ext1_wakeup(GPIO_SEL_13, ESP_EXT1_WAKEUP_ANY_HIGH);
+    // Set to wake up by GPIO35
+    esp_sleep_enable_ext1_wakeup(GPIO_SEL_35, ESP_EXT1_WAKEUP_ALL_LOW);
+    esp_deep_sleep_start();
 }
 
 int getVolt(){

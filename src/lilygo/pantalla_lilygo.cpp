@@ -106,7 +106,14 @@ void pantalla_lilygo::dibuja_cuerpo(){
    
 }
 
-
+void pantalla_lilygo::msg(const char *szText){
+    fillRectangle(20, 700 , 500, 80, 255);
+    drawRectangle(20, 700 , 500, 80, 255);
+    int cursor_x = 25;
+    int cursor_y = 720;
+    write(szText, cursor_x, cursor_y);
+    dibuja_flush( );
+}
 
 void pantalla_lilygo::dibuja_menu(){
     char szFile[128];
@@ -164,12 +171,16 @@ void pantalla_lilygo::boton4(){
     dibuja_cuerpo();
     dibuja_flush( );
 }
+//Esta definida en time_func_lilygo.cpp
+void apagarLilygo();
+
 void pantalla_lilygo::boton5(){
     Serial.println("Boton 5");
     fillRectangle(315,10,24,24,255);
     drawBMP("/img/sleep.bmp",315,10);
     dibuja_flush( );
-    apagamos();
+    //apagamos();
+    apagarLilygo();
 }
 
 void pantalla_lilygo::pgUp(){

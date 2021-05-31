@@ -61,10 +61,12 @@ void tskEventHandler(void * parameter ){
             }
             if (pulsacion.id==10){
                 if(pulsacion.x==1){
-                    pScrPrincipal->pgUp();
+                    //pScrPrincipal->pgUp();
+                    pScrPrincipal->msg("UP");
                 }
                 if(pulsacion.x==2){
-                    pScrPrincipal->pgDown();
+                    //pScrPrincipal->pgDown();
+                    pScrPrincipal->msg("DOWN");
                 }
             }
         }

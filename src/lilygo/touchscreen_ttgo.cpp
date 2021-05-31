@@ -2,9 +2,9 @@
 #include "Button2.h"
 #include "epd_driver.h"
 
-#define BUTTON_1            34
-#define BUTTON_2            35
-#define BUTTON_3            39
+ 
+#define BUTTON_1            39
+#define BUTTON_2            34
 
 #define TOUCH_INT   13
 TouchClass touch;
@@ -13,28 +13,25 @@ extern QueueHandle_t qTouchScreenQueue;
 
 Button2  btn1(BUTTON_1);
 Button2  btn2(BUTTON_2);
-Button2  btn3(BUTTON_3);
 
-void b1Pressed(Button2 &b){
-    tp_finger_t FingerItem;
-    FingerItem.id=10;
-    FingerItem.x=1;
-    Serial.printf("B1 wasPressed!\n");
-    xQueueSend( qTouchScreenQueue,( void * ) &FingerItem, ( TickType_t ) 0 );
-    
-}
+
+
 void b2Pressed(Button2 &b){
+    Serial.printf("B2 wasPressed!\n");
+
     tp_finger_t FingerItem;
     FingerItem.id=10;
     FingerItem.x=2;
-    Serial.printf("B2 wasPressed!\n");
-    xQueueSend( qTouchScreenQueue,( void * ) &FingerItem, ( TickType_t ) 0 );
-    
-    
+    xQueueSend( qTouchScreenQueue,( void * ) &FingerItem, ( TickType_t ) 0 );    
 }
-void b3Pressed(Button2 &b){
-    
-    
+
+void b1Pressed(Button2 &b){
+    Serial.printf("B1 wasPressed!\n");
+
+    tp_finger_t FingerItem;
+    FingerItem.id=10;
+    FingerItem.x=1;
+    xQueueSend( qTouchScreenQueue,( void * ) &FingerItem, ( TickType_t ) 0 );
 }
 
 
@@ -45,7 +42,7 @@ void tskTouchScreen_ttgo(void * parameter ){
     //Inicializamos los botones
     btn1.setPressedHandler(b1Pressed);
     btn2.setPressedHandler(b2Pressed);
-    btn3.setPressedHandler(b3Pressed);
+
     Wire.begin(15, 14);
 
     if (!touch.begin()) {
@@ -70,7 +67,10 @@ void tskTouchScreen_ttgo(void * parameter ){
                 point[1]=FingerItem.y;
             }
         }
-       
+        btn1.loop();
+        btn2.loop();
+
+        
         delay(50);
 
     }

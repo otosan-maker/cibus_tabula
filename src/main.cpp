@@ -69,7 +69,7 @@ void setup() {
   #ifdef CONFIG__M5_PAPER__
   xTaskCreatePinnedToCore(tskTouchScreen, "EventHandler",5000,NULL,1,&thTouchScreenHandler,tskNO_AFFINITY );
   #else
-  xTaskCreatePinnedToCore(tskTouchScreen_ttgo, "EventHandler",5000,NULL,1,&thTouchScreenHandler,1 );
+  xTaskCreatePinnedToCore(tskTouchScreen_ttgo, "EventHandler",5000,NULL,1,&thTouchScreenHandler,tskNO_AFFINITY );
   #endif
   
   pScrPrincipal->dibuja_fondo();
