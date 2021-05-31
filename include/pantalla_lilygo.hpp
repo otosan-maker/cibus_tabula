@@ -45,7 +45,7 @@ class pantalla_lilygo : public pantalla{
     void pgDown();
     void botonListado(int iIndicePulsado);
 
-    void write(char * szTexto,int x, int y);
+    void write(const char * szTexto,int x, int y);
     void drawBMP(const char *szFile,int x, int y);
     void drawRectangle(int x,int y,int width,int heigth,int color);
     void fillRectangle(int x,int y,int width,int heigth,int color);

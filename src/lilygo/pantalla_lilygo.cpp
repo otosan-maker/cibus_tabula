@@ -245,7 +245,7 @@ void pantalla_lilygo::drawBMP(const char *szFile,int x, int y){
 
 #define FONT_Y_SIZE 20
 
-void pantalla_lilygo::write(char * szTexto,int cursor_x, int cursor_y){
+void pantalla_lilygo::write(const char * szTexto,int cursor_x, int cursor_y){
     int cX=cursor_x;
     int cY=cursor_y+FONT_Y_SIZE;
     //Serial.printf("Cadena  %d, %d ---  %s\n",cursor_x,cursor_y,szTexto);
