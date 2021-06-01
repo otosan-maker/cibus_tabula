@@ -26,6 +26,7 @@ void consumido2SD(const char* szURL);
 void print_wakeup_reason();
 
  void  getTimeM5(struct tm *myTm);
+ void inittime_m5(struct tm mGlobalTm );
  void apagarM5(int iDuracion);
 
  void  getTimeLilygo(struct tm *myTm);

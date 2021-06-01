@@ -14,6 +14,26 @@ int wifi_status = 0;
 extern producto vProductos[30];
 extern int      vProductoSize;
 
+//Para gestionar la hora
+struct tm mGlobalTm;
+bool      mGlobalTmDefined=false;
+
+void initTime(){
+    const char* ntpServer = "pool.ntp.org";
+    const long  gmtOffset_sec = 0;
+    const int   daylightOffset_sec = 3600;
+
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+    if(!getLocalTime(&mGlobalTm)){
+      Serial.println("Failed to obtain time");
+      mGlobalTmDefined=false;
+      return;
+    }
+    else
+      mGlobalTmDefined=true;
+}
+
+
 
 void InitWifi(){
   WiFi.mode(WIFI_STA);
@@ -32,9 +52,12 @@ void InitWifi(){
   //Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  initTime();
+#ifdef CONFIG__M5_PAPER__
+  inittime_m5(mGlobalTm );
+#endif
   wifi_status=1;
 }
-
 
 
 
@@ -170,3 +193,5 @@ void CloseWifi(){
   WiFi.disconnect();
   wifi_status=0;
 }
+
+

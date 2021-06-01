@@ -5,15 +5,28 @@
 
 #define BATT_PIN            36
 
+extern struct tm mGlobalTm;
+extern bool      mGlobalTmDefined;
+
  void  getTimeLilygo(struct tm *myTm){
-     myTm->tm_sec= 00;
-    myTm->tm_min= 30;
-    myTm->tm_hour= 20;
+    
+    if (mGlobalTmDefined==false){
+        myTm->tm_sec= 00;
+        myTm->tm_min= 30;
+        myTm->tm_hour= 20;
 
-    myTm->tm_mday=20;
-    myTm->tm_mon=3;
-    myTm->tm_year=2021;
+        myTm->tm_mday=20;
+        myTm->tm_mon=3;
+        myTm->tm_year=2021;
+    }else{
+        myTm->tm_sec= mGlobalTm.tm_sec;
+        myTm->tm_min= mGlobalTm.tm_min;
+        myTm->tm_hour= mGlobalTm.tm_hour;
 
+        myTm->tm_mday=mGlobalTm.tm_mday;
+        myTm->tm_mon=mGlobalTm.tm_mon;
+        myTm->tm_year=mGlobalTm.tm_year;
+    }
 }
 
 void apagarLilygo(){

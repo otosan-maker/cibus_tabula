@@ -43,17 +43,20 @@ void writeBatt2SD(){
 
 void consumido2SD(const char* szURL){
   char strTmp[100];
+
+  File myFile;
+#ifdef CONFIG__M5_PAPER__
   rtc_time_t RTCtime;
   rtc_date_t RTCDate;
   M5.RTC.getTime(&RTCtime);
   M5.RTC.getDate(&RTCDate);
   sprintf(strTmp,"%d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
-  
-  File myFile;
-#ifdef CONFIG__M5_PAPER__
   myFile = SD.open("/consumidos.txt", "a");
 #else
+  struct tm mTm;
   myFile = SPIFFS.open("/consumidos.txt", "a");
+  getTimeLilygo(&mTm);
+  sprintf(strTmp,"%d/%02d/%d %d:%02d",mTm.tm_mday ,mTm.tm_mon ,mTm.tm_year,mTm.tm_hour ,mTm.tm_min );
 #endif
   if (myFile) {
     myFile.printf("%s.- Consumo %s.\n", strTmp ,szURL);
@@ -65,17 +68,21 @@ void consumido2SD(const char* szURL){
 
 void msg2BatteryLog(const char* szMsg){
   char strTmp[100];
+  
+  
+  File myFile;
+#ifdef CONFIG__M5_PAPER__
   rtc_time_t RTCtime;
   rtc_date_t RTCDate;
   M5.RTC.getTime(&RTCtime);
   M5.RTC.getDate(&RTCDate);
   sprintf(strTmp,"%d/%02d/%d %d:%02d",RTCDate.day,RTCDate.mon,RTCDate.year,RTCtime.hour,RTCtime.min );
-  
-  File myFile;
-#ifdef CONFIG__M5_PAPER__
   myFile = SD.open("/mensajes.txt", "a");
 #else
+   struct tm mTm;
   myFile = SPIFFS.open("/mensajes.txt", "a");
+  getTimeLilygo(&mTm);
+  sprintf(strTmp,"%d/%02d/%d %d:%02d",mTm.tm_mday ,mTm.tm_mon ,mTm.tm_year,mTm.tm_hour ,mTm.tm_min );
 #endif
 
 
