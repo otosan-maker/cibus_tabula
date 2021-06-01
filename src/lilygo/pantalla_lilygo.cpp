@@ -9,7 +9,7 @@ extern int      vProductoSize;
 extern int      iPrimerElemento;
 extern char     szLocalizacion[25];
 extern char     *szgLocalizaciones[];
-
+extern char     szIPAddr[40];;
 
 pantalla_lilygo :: pantalla_lilygo(){
     //Serial.println("pantalla_lilygo ::: Inicializamos \n");
@@ -86,7 +86,10 @@ void pantalla_lilygo::dibuja_cuerpo(){
     //canvas.fillRect(10,102,500,3,15);
     fillRectangle(10,102,500,3, 0);
     //canvas.setTextSize(3);
-    for(int i =iPrimerElemento;(i<20+iPrimerElemento);i++){
+    int ultimoElemento=vProductoSize;
+    if ((20+iPrimerElemento)<vProductoSize )
+        ultimoElemento=20+iPrimerElemento;
+    for(int i =iPrimerElemento;(i<ultimoElemento);i++){
         int iLocalizacion = i - iPrimerElemento;
         if(vProductos[i].m_seleccionado)
             drawBMP("/img/radio_button_checked.bmp", 20, 110+iLocalizacion*35);
@@ -103,7 +106,7 @@ void pantalla_lilygo::dibuja_cuerpo(){
         //canvas.fillRect(20,140+iLocalizacion*35,500,2,15);
         fillRectangle(20, 140+iLocalizacion*35 , 500, 2, 0);
     }
-   
+   msg(szIPAddr);
 }
 
 void pantalla_lilygo::msg(const char *szText){
@@ -185,21 +188,27 @@ void pantalla_lilygo::boton5(){
 
 void pantalla_lilygo::pgUp(){
     Serial.println("pgUp");
+    Serial.printf("pgUp:: el primer elemento es  %d\n",iPrimerElemento);
+    Serial.printf("pgUp:: vProductoSize es  %d\n",vProductoSize);
     iPrimerElemento+=3;
+    Serial.printf("pgUp:: el primer elemento es  %d\n",iPrimerElemento);
     if(iPrimerElemento>vProductoSize-19)
         iPrimerElemento=vProductoSize-19;
+    if(iPrimerElemento<0)
+        iPrimerElemento=0;
     Serial.printf("pgUp::cambiamos el primer elemento a  %d\n",iPrimerElemento);
     dibuja_cuerpo();
     dibuja_flush();
-    Serial.printf("pgUp::cambiamos el primer elemento a  %d\n",iPrimerElemento);
+    Serial.printf("pgUp::salimos a  \n");
 }
 
 void pantalla_lilygo::pgDown(){
     Serial.println("pgDown");
+    Serial.printf("pgDown:: el primer elemento es  %d\n",iPrimerElemento);
     iPrimerElemento-=3;
     if(iPrimerElemento<0)
         iPrimerElemento=0;
-    Serial.printf("pgDown::cambiamos el primer elemento a  %d\n",iPrimerElemento);
+    
     dibuja_cuerpo();
     dibuja_flush();
     Serial.printf("pgDown::cambiamos el primer elemento a  %d\n",iPrimerElemento);

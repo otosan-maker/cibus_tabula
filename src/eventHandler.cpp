@@ -61,11 +61,14 @@ void tskEventHandler(void * parameter ){
             }
             if (pulsacion.id==10){
                 if(pulsacion.x==1){
-                    //pScrPrincipal->pgUp();
-                    pScrPrincipal->msg("UP");
+                    pScrPrincipal->pgUp();
+                    int voltaje = getVolt();
+                    char tmp[100];
+                    sprintf(tmp,"UP ::: voltaje:%d",voltaje);
+                    pScrPrincipal->msg(tmp);
                 }
                 if(pulsacion.x==2){
-                    //pScrPrincipal->pgDown();
+                    pScrPrincipal->pgDown();
                     pScrPrincipal->msg("DOWN");
                 }
             }

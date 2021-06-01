@@ -26,7 +26,7 @@ void inittime_m5(struct tm mGlobalTm ){
     RTCtime.min = mGlobalTm.tm_min;
     RTCtime.sec = mGlobalTm.tm_sec;
     M5.RTC.setTime(&RTCtime);
-    RTCDate.year = mGlobalTm.tm_year;
+    RTCDate.year = 1900 + mGlobalTm.tm_year;
     RTCDate.mon = mGlobalTm.tm_mon;
     RTCDate.day = mGlobalTm.tm_mday;
     M5.RTC.setDate(&RTCDate);

@@ -52,9 +52,9 @@ void loadJson(const char*szMiLocalizacion){
       
       vProductos[vProductoSize++].set(atoi(identificador),fecha_a,fecha_b,prod,localizacion); 
 
-      //Serial.printf("leimos %s :: %s :: %s :: %s :: %s \n",identificador,fecha_a,fecha_b,prod,localizacion);
+      Serial.printf("leimos %s :: %s :: %s :: %s :: %s \n",identificador,fecha_a,fecha_b,prod,localizacion);
       repo0 = doc[i];
     }
-    
+    Serial.printf("vProductoSize %d\n", vProductoSize);
     fLeemos.close();
 }

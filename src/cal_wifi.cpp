@@ -21,7 +21,7 @@ bool      mGlobalTmDefined=false;
 void initTime(){
     const char* ntpServer = "pool.ntp.org";
     const long  gmtOffset_sec = 0;
-    const int   daylightOffset_sec = 3600;
+    const int   daylightOffset_sec = 7200;
 
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     if(!getLocalTime(&mGlobalTm)){
@@ -31,9 +31,11 @@ void initTime(){
     }
     else
       mGlobalTmDefined=true;
+    mGlobalTm.tm_mon++;
+    mGlobalTm.tm_year+=1900;
 }
 
-
+char szIPAddr[40];
 
 void InitWifi(){
   WiFi.mode(WIFI_STA);
@@ -52,6 +54,8 @@ void InitWifi(){
   //Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  IPAddress broadCast = WiFi.localIP();
+  sprintf(szIPAddr,"%d.%d.%d.%d",broadCast[0],broadCast[1],broadCast[2],broadCast[3] );
   initTime();
 #ifdef CONFIG__M5_PAPER__
   inittime_m5(mGlobalTm );
